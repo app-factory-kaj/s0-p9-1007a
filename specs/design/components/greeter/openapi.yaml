@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Greeter API
+  version: 0.1.0
+  description: Returns a JSON greeting for a given name.
+servers:
+  - url: /
+paths:
+  /hello:
+    get:
+      operationId: getGreeting
+      summary: Get a JSON greeting for a name
+      parameters:
+        - name: name
+          in: query
+          required: false
+          description: The name to greet. Defaults to "World" when omitted or empty.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The greeting for the requested (or default) name
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Greeting'
+components:
+  schemas:
+    Greeting:
+      type: object
+      required: [name, message]
+      properties:
+        name:
+          type: string
+          description: The name that was greeted
+        message:
+          type: string
+          description: The full greeting text
