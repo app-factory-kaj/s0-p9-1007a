@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Teams building and testing services on this platform often need a tiny, dependable HTTP endpoint to use as a smoke-test target, a demo backend, or a reference example — standing one up today means writing boilerplate for something trivial.
+Teams building and testing services on this platform often need a tiny, dependable HTTP endpoint to use as a smoke-test target, a demo backend, or a reference example — standing one up today means writing boilerplate for something trivial. S0 marker s0-p9-1007a.
 
 ## Solution
 
