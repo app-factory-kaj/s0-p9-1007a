@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-07T01:57:00Z",
+  "commit": "976308aa58e5be47e369f4a830cda95d91d7d5c8",
+  "baseUrl": "http://development-default.openchoreoapis.localhost:19080/s0-p9-1007a-greeter-http",
+  "isolation": "the greeter service is stateless and unauthenticated (per specs/design/components/greeter/design.json); each scenario is an independent, side-effect-free GET request, so no per-scenario container or login was needed",
+  "scenarios": [
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 6,
+      "rule": "A request naming someone receives a greeting addressed to them",
+      "scenario": "Greeting a named caller",
+      "tags": ["@story-1"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -sS -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Caller sends GET /hello?name=Alice", "keyword": "When",
+          "command": "curl -sS -i \"$BASE/hello?name=Alice\"",
+          "exit": 0, "observed": "HTTP/1.1 200 OK, body {\"message\":\"Hello, Alice!\",\"name\":\"Alice\"}" },
+        { "text": "the response is a JSON greeting addressed to \"Alice\"", "keyword": "Then",
+          "command": "curl -sS \"$BASE/hello?name=Alice\" | jq -e '.name == \"Alice\" and (.message | test(\"Alice\"))'",
+          "exit": 0, "observed": "true" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello?name=Alice", "status": 200 }]
+      }
+    },
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 14,
+      "rule": "A request with no name still receives a default greeting",
+      "scenario": "Greeting with no name supplied",
+      "tags": ["@story-2"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -sS -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Caller sends GET /hello with no name parameter", "keyword": "When",
+          "command": "curl -sS -i \"$BASE/hello\"",
+          "exit": 0, "observed": "HTTP/1.1 200 OK, body {\"message\":\"Hello, World!\",\"name\":\"World\"}" },
+        { "text": "the response is a JSON greeting addressed to \"World\"", "keyword": "Then",
+          "command": "curl -sS \"$BASE/hello\" | jq -e '.name == \"World\" and (.message | test(\"World\"))'",
+          "exit": 0, "observed": "true" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello", "status": 200 }]
+      }
+    },
+    {
+      "feature": "Greeting",
+      "featureFile": "specs/validation/acceptance/greeting.feature",
+      "line": 19,
+      "rule": "A request with no name still receives a default greeting",
+      "scenario": "Greeting with an empty name",
+      "tags": ["@story-2"],
+      "outcome": "passed",
+      "steps": [
+        { "text": "the greeter service is running", "keyword": "Given",
+          "command": "curl -sS -o /dev/null -w '%{http_code}' \"$BASE/hello\"",
+          "exit": 0, "observed": "200" },
+        { "text": "an API Caller sends GET /hello?name=", "keyword": "When",
+          "command": "curl -sS -i \"$BASE/hello?name=\"",
+          "exit": 0, "observed": "HTTP/1.1 200 OK, body {\"message\":\"Hello, World!\",\"name\":\"World\"}" },
+        { "text": "the response is a JSON greeting addressed to \"World\"", "keyword": "Then",
+          "command": "curl -sS \"$BASE/hello?name=\" | jq -e '.name == \"World\" and (.message | test(\"World\"))'",
+          "exit": 0, "observed": "true" }
+      ],
+      "evidence": {
+        "network": [{ "method": "GET", "url": "/hello?name=", "status": 200 }]
+      }
+    }
+  ]
+}
